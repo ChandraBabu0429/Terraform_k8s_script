@@ -1,28 +1,31 @@
-name: Ansible CI/CD Pipeline
+name: Ansible Playbook CI/CD
 
 on:
   push:
     branches:
-      - master    # Trigger on pushes to the master branch
+      - main  # or master depending on your default branch
   pull_request:
     branches:
-      - master    # Trigger on pull requests to the master branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use an appropriate runner for your case
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Ansible
+    - name: Set up Ansible
+      uses: shivammathur/setup-ansible@v2
+      with:
+        version: 'latest'
+
+    - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y software-properties-common
-        sudo add-apt-repository ppa:ansible/ansible
-        sudo apt update
-        sudo apt install -y ansible
+        sudo apt install -y python3-apt
 
     - name: Run Ansible playbook
-      run: ansible-playbook ansible.yml
+      run: |
+        ansible-playbook ansible.yml -i localhost, --connection=local
