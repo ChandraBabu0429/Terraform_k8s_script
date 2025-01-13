@@ -1,23 +1,5 @@
-# ansible.yml
-- name: Install curl and verify installation
-  hosts: localhost
-  become: yes
-  tasks:
-    - name: Install curl
-      apt:
-        name: curl
-        state: present
-        update_cache: yes
-
-    - name: Check curl version
-      command: curl --version
-      register: curl_version
-
-    - name: Show curl version
-      debug:
-        var: curl_version.stdout
-
-  hosts: localhost
+- name: Install Apache on WSL
+  hosts: 172.29.154.116  # IP address of your WSL
   become: yes
   tasks:
     - name: Install Apache
@@ -30,12 +12,4 @@
       service:
         name: apache2
         state: started
-
-    - name: Debug Apache Version
-      command: apache2 -v
-      register: apache_version
-
-    - name: Show Apache Version
-      debug:
-        msg: "Apache Version: {{ apache_version.stdout }}"
 
