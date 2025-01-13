@@ -1,22 +1,29 @@
-# .github/workflows/ci-cd.yml
-name: Ansible Playbook Execution
+name: CI/CD for Ansible Playbook
 
 on:
   push:
     branches:
-      - main  # Or the branch where you want to trigger CI/CD
+      - master
 
 jobs:
-  ansible:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Ansible
-      uses: shivammathur/setup-ansible@v2
+      - name: Set up SSH for WSL
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-    - name: Run Ansible Playbook
-      run: |
-        ansible-playbook ansible.yml
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook ansible.yml -u chandrababu --private-key ~/.ssh/id_rsa
