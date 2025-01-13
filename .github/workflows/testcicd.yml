@@ -1,31 +1,22 @@
-name: Ansible Playbook CI/CD
+# .github/workflows/ci-cd.yml
+name: Ansible Playbook Execution
 
 on:
   push:
     branches:
-      - main  # or master depending on your default branch
-  pull_request:
-    branches:
-      - main
+      - main  # Or the branch where you want to trigger CI/CD
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest  # Use an appropriate runner for your case
+  ansible:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up Ansible
       uses: shivammathur/setup-ansible@v2
-      with:
-        version: 'latest'
 
-    - name: Install dependencies
+    - name: Run Ansible Playbook
       run: |
-        sudo apt update
-        sudo apt install -y python3-apt
-
-    - name: Run Ansible playbook
-      run: |
-        ansible-playbook ansible.yml -i localhost, --connection=local
+        ansible-playbook ansible.yml
