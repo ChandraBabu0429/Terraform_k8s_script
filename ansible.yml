@@ -1,0 +1,16 @@
+# Filename: playbook.yml
+- name: Install Apache and Start Service
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Ensure Apache is running
+      service:
+        name: apache2
+        state: started
+
