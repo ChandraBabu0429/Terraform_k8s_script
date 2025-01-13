@@ -1,22 +1,23 @@
-name: CI/CD - Ansible Playbook for WSL
+name: Ansible CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Or your desired branch
+      - master    # Trigger on pushes to the master branch
+  pull_request:
+    branches:
+      - master    # Trigger on pull requests to the master branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH keys
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Store your private SSH key in GitHub Secrets
+    - name: Set up Ansible
+      uses: shivammathur/setup-ansible@v1
 
-    - name: Run Ansible Playbook on WSL
-      run: |
-        ansible-playbook -i "172.29.154.116/20," --user=chandrababu --private-key=$HOME/.ssh/id_rsa playbook.yml
+    - name: Run Ansible playbook
+      run: ansible-playbook ansible.yml
