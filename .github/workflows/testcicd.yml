@@ -16,8 +16,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Ansible
-      uses: shivammathur/setup-ansible@v1
+    - name: Install Ansible
+      run: |
+        sudo apt update
+        sudo apt install -y software-properties-common
+        sudo add-apt-repository ppa:ansible/ansible
+        sudo apt update
+        sudo apt install -y ansible
 
     - name: Run Ansible playbook
       run: ansible-playbook ansible.yml
