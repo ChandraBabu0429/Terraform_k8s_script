@@ -1,0 +1,28 @@
+name: Ansible CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master    # Trigger on pushes to the master branch
+  pull_request:
+    branches:
+      - master    # Trigger on pull requests to the master branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Ansible
+      run: |
+        sudo apt update
+        sudo apt install -y software-properties-common
+        sudo add-apt-repository ppa:ansible/ansible
+        sudo apt update
+        sudo apt install -y ansible
+
+    - name: Run Ansible playbook
+      run: ansible-playbook ansible.yml
